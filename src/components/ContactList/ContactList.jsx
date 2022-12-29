@@ -1,8 +1,16 @@
 import React from 'react';
 import "./ContactListStyles.scss";
+import { deleteContact } from 'components/redux/contactSlice';
+import { useDispatch } from 'react-redux';
 
 
-const ContactList = ({ contacts, onDeleteContact }) => (
+
+
+const ContactList = ({ contacts }) => {
+
+const dispatch = useDispatch();
+
+return (
   <ul className="ContactList">
     {contacts.map(({ id, name, number }) => (
       <li key={id} className="ContactList__item">
@@ -12,13 +20,14 @@ const ContactList = ({ contacts, onDeleteContact }) => (
         <button
           type="button"
           className="ContactList__btn"
-          onClick={() => onDeleteContact(id)}
+          onClick={() => dispatch(deleteContact({id}))}
         >
           Delete
         </button>
       </li>
     ))}
-  </ul>
-);
+  </ul>)
+
+};
 
 export default ContactList;

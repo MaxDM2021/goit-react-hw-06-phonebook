@@ -1,90 +1,84 @@
 import { useState } from 'react';
 import useLocalStorage from './hooks';
-import shortid from "shortid";
+import shortid from 'shortid';
 import Notiflix from 'notiflix';
+import { useDispatch } from 'react-redux';
+import { addContact, getContacts } from './redux/contactSlice';
 
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
-import "./App.scss";
-
+import './App.scss';
 
 const initialContacts = [
-  {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-  {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-  {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-  {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'}
+  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ];
 
 
+
 export default function App() {
+  const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
+  const [filt, setFilt] = useState('');
+  const dispatch = useDispatch();
 
-    const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
-    const [filt, setFilt] = useState('');
-
-
-   const  addContact = (name, number)  => {
-
+  const addContact = (name, number) => {
+   
     const newContact = {
       id: shortid.generate(),
       name,
       number,
     };
 
-   
     if (contacts.some(contact => contact.name === newContact.name)) {
-      
       Notiflix.Notify.warning(`❌ ${newContact.name} is already is contacts`, {
         timeout: 3000,
-        });
-      
+      });
+
       return false;
-      }
-     
-
-    setContacts(prevState => [ newContact, ...prevState]);
+    }
+    dispatch(addContact(newContact))
+    setContacts(prevState => [newContact, ...prevState]);
     return true;
-   
   };
 
+  // const changeFilter = e => {
+  //   setFilt(e.currentTarget.value.toLowerCase());
+  // };
 
-  
-  const changeFilter = (e) => {
-    setFilt( e.currentTarget.value.toLowerCase());
-  };
+  const constgetVisibleContacts = () => {
+    if (filt === '') {
+      return false;
+    }
 
-
-
- const constgetVisibleContacts = () => {
-
-  if (filt === '') {
-    return false;
-  }
-   
-  return contacts.filter(contact =>
-    contact.name.toLocaleLowerCase().includes(filt)
+    return contacts.filter(contact =>
+      contact.name.toLocaleLowerCase().includes(filt.toLocaleLowerCase())
     );
   };
 
-    const deleteContact = contactId => {
-      setContacts(prevState =>  prevState.filter(contact => contact.id !== contactId))
-       };
+  // const deleteContact = contactId => {
+  //   setContacts(prevState =>
+  //     prevState.filter(contact => contact.id !== contactId)
+  //   );
+  // };
 
+  return (
+    <div className="Phonebook">
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={addContact} />
 
-
-    return (
-      <div className="Phonebook">
-      <h1 >Phonebook</h1>
-      <ContactForm onSubmit={addContact}/>
-    
-      <h2 className='TitleContacts'>Contacts</h2>
-      <Filter value={filt} onChange={changeFilter}/>
-      <ContactList  contacts={constgetVisibleContacts() ? constgetVisibleContacts() : contacts }
-          onDeleteContact={deleteContact}/>
+      <h2 className="TitleContacts">Contacts</h2>
+      <Filter value={filt} />
+      <ContactList
+        contacts={
+          constgetVisibleContacts() ? constgetVisibleContacts() : contacts
+        }
+      />
     </div>
-    );
-  }
-
+  );
+}
 
 // ==== Старая версия на классах ====
 // class App extends Component {
@@ -98,7 +92,7 @@ export default function App() {
 //       filter: "",
 //    };
 
-//    addContact = (name, number) => {   
+//    addContact = (name, number) => {
 //     const newContact = {
 //       id: shortid.generate(),
 //       name,
@@ -107,11 +101,11 @@ export default function App() {
 //     console.log(newContact);
 
 //     if (this.state.contacts.some(contact => contact.name === newContact.name)) {
-      
+
 //       Notiflix.Notify.warning(`❌ ${newContact.name} is already is contacts`, {
 //         timeout: 3000,
 //         });
-      
+
 //       return false;
 //       }
 //     this.setState(({ contacts }) => ({
@@ -141,7 +135,6 @@ export default function App() {
 //     );
 //   };
 
-
 // componentDidMount() {
 //   console.log('App componentDidMount');
 // }
@@ -153,13 +146,10 @@ export default function App() {
 
 // }
 
-
-
 //   render() {
-    
-    
+
 //     console.log('App render');
-    
+
 //     const { filter } = this.state;
 //     const visibleContacts = this.getVisibleContacts();
 
@@ -167,7 +157,7 @@ export default function App() {
 //       <div className="Phonebook">
 //       <h1 >Phonebook</h1>
 //       <ContactForm onSubmit={this.addContact}  />
-    
+
 //       <h2 className='TitleContacts'>Contacts</h2>
 //       <Filter value={filter} onChange={this.changeFilter} />
 //       <ContactList  contacts={visibleContacts}
