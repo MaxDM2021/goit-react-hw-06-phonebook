@@ -20,29 +20,23 @@ const contactSlice = createSlice({
            state.item.push(action.payload);
         },
         deleteContact(state, action) {
-            return state.item.filter(contact => contact.id !==action.payload.id);
+            return state.item.filter(contact => contact.id !==action.payload);
         },
-
-        
-
-
     },
 })
 
 
 const persistConfig = {
-    key: 'contacts',
+    key: 'item',
     storage,
   whitelist: ['item'],
 
   };
   
-  export const contactReducer = persistReducer(persistConfig, contactSlice.reducer);
-  
-
+export const contactReducer = persistReducer(persistConfig, contactSlice.reducer);
 export const { addContact, deleteContact } = contactSlice.actions;
 
 
 // ===== Selectors =====
 
-export const getClicksValue = state => state.item.isLoggedIn;
+export const getContacts = state => state.contacts.item;

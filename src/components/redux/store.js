@@ -34,3 +34,8 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
+
+// ===== Selectors =====
+
+export const getContacts = state => state.contact.item;
+

@@ -13,10 +13,6 @@ const filterSlice = createSlice({
         filterContact(state, action) {
             state.filt = action.payload;
         },
-
-        
-
-
     },
 })
 
@@ -34,4 +30,4 @@ export const { filterContact } = filterSlice.actions;
 
 // ===== Selectors =====
 
-export const getFilterValue = state => state.filters.filt;
+export const getFilterValue = state => state.filt;

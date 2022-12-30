@@ -1,30 +1,33 @@
-import { useState } from 'react';
-import useLocalStorage from './hooks';
+// import { useState } from 'react';
+// import useLocalStorage from './hooks';
 import shortid from 'shortid';
 import Notiflix from 'notiflix';
-import { useDispatch } from 'react-redux';
-import { addContact, getContacts } from './redux/contactSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from './redux/contactSlice';
+import { getFilterValue } from './redux/filterSlice';
+import { getContacts } from './redux/store'
 
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
 import './App.scss';
 
-const initialContacts = [
-  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-];
-
-
+// const initialContacts = [
+//   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+//   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+//   { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+//   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+// ];
 
 export default function App() {
-  const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
-  const [filt, setFilt] = useState('');
-  const dispatch = useDispatch();
+  // const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
+  // const [filt, setFilt] = useState('');
 
-  const addContact = (name, number) => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const filterContact = useSelector(getFilterValue);
+
+  const addCont = (name, number) => {
    
     const newContact = {
       id: shortid.generate(),
@@ -40,7 +43,7 @@ export default function App() {
       return false;
     }
     dispatch(addContact(newContact))
-    setContacts(prevState => [newContact, ...prevState]);
+    // setContacts(prevState => [newContact, ...prevState]);
     return true;
   };
 
@@ -49,12 +52,12 @@ export default function App() {
   // };
 
   const constgetVisibleContacts = () => {
-    if (filt === '') {
+    if (filterContact === '') {
       return false;
     }
 
     return contacts.filter(contact =>
-      contact.name.toLocaleLowerCase().includes(filt.toLocaleLowerCase())
+      contact.name.toLocaleLowerCase().includes(filterContact.toLocaleLowerCase())
     );
   };
 
@@ -67,10 +70,10 @@ export default function App() {
   return (
     <div className="Phonebook">
       <h1>Phonebook</h1>
-      <ContactForm onSubmit={addContact} />
+      <ContactForm onSubmit={addCont} />
 
       <h2 className="TitleContacts">Contacts</h2>
-      <Filter value={filt} />
+      <Filter value={filterContact} />
       <ContactList
         contacts={
           constgetVisibleContacts() ? constgetVisibleContacts() : contacts
