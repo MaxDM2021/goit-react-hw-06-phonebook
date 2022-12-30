@@ -30,4 +30,4 @@ export const { filterContact } = filterSlice.actions;
 
 // ===== Selectors =====
 
-export const getFilterValue = state => state.filt;
+export const getFilterValue = state => state.filter.filt;

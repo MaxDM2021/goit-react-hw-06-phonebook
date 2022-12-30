@@ -20,7 +20,7 @@ return (
         <button
           type="button"
           className="ContactList__btn"
-          onClick={() => dispatch(deleteContact({id}))}
+          onClick={() => dispatch(deleteContact(id))}
         >
           Delete
         </button>

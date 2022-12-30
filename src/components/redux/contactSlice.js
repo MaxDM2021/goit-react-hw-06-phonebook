@@ -20,7 +20,7 @@ const contactSlice = createSlice({
            state.item.push(action.payload);
         },
         deleteContact(state, action) {
-            return state.item.filter(contact => contact.id !==action.payload);
+            state.item = state.item.filter(contact => contact.id !== action.payload);
         },
     },
 })
@@ -29,7 +29,7 @@ const contactSlice = createSlice({
 const persistConfig = {
     key: 'item',
     storage,
-  whitelist: ['item'],
+    whitelist: ['item'],
 
   };
   
@@ -39,4 +39,4 @@ export const { addContact, deleteContact } = contactSlice.actions;
 
 // ===== Selectors =====
 
-export const getContacts = state => state.contacts.item;
+export const getContacts = state => state.contact.item;

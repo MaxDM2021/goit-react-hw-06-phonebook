@@ -5,7 +5,7 @@ import Notiflix from 'notiflix';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from './redux/contactSlice';
 import { getFilterValue } from './redux/filterSlice';
-import { getContacts } from './redux/store'
+import { getContacts } from './redux/contactSlice';
 
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -57,9 +57,12 @@ export default function App() {
     }
 
     return contacts.filter(contact =>
-      contact.name.toLocaleLowerCase().includes(filterContact.toLocaleLowerCase())
+      contact.name.toLowerCase().includes(filterContact)
     );
   };
+
+
+
 
   // const deleteContact = contactId => {
   //   setContacts(prevState =>

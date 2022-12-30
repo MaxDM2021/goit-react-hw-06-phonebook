@@ -37,5 +37,5 @@ export const persistor = persistStore(store);
 
 // ===== Selectors =====
 
-export const getContacts = state => state.contact.item;
+// export const getContacts = state => state.contact.item;
 
